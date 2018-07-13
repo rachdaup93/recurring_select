@@ -92,6 +92,7 @@ window.RecurringSelectDialog =
       section = @content.find('.daily_options')
       interval_input = section.find('.rs_daily_interval')
       interval_input.val(@current_rule.hash.interval)
+      interval_input.off "change keyup"
       interval_input.on "change keyup", @intervalChanged
       section.show()
 
@@ -101,12 +102,14 @@ window.RecurringSelectDialog =
       # connect the interval field
       interval_input = section.find('.rs_weekly_interval')
       interval_input.val(@current_rule.hash.interval)
+      interval_input.off "change keyup"
       interval_input.on "change keyup", @intervalChanged
 
       # connect the day fields
       if @current_rule.hash.validations? && @current_rule.hash.validations.day?
         $(@current_rule.hash.validations.day).each (index, val) ->
           section.find(".day_holder a[data-value='"+val+"']").addClass("selected")
+      section.off "click"
       section.on "click", ".day_holder a", @daysChanged
 
       section.show()
@@ -115,6 +118,7 @@ window.RecurringSelectDialog =
       section = @content.find('.monthly_options')
       interval_input = section.find('.rs_monthly_interval')
       interval_input.val(@current_rule.hash.interval)
+      interval_input.off "change keyup"
       interval_input.on "change keyup", @intervalChanged
 
       @current_rule.hash.validations ||= {}
@@ -127,6 +131,7 @@ window.RecurringSelectDialog =
       section.find(".monthly_rule_type_week").prop("checked", in_week_mode)
       section.find(".monthly_rule_type_day").prop("checked", !in_week_mode)
       @toggle_month_view()
+      section.off "change"
       section.find("input[name=monthly_rule_type]").on "change", @toggle_month_view
       section.show()
 
@@ -134,6 +139,7 @@ window.RecurringSelectDialog =
       section = @content.find('.yearly_options')
       interval_input = section.find('.rs_yearly_interval')
       interval_input.val(@current_rule.hash.interval)
+      interval_input.off "change keyup"
       interval_input.on "change keyup", @intervalChanged
       section.show()
 
@@ -326,7 +332,6 @@ window.RecurringSelectDialog =
       "
       for day_of_week in [$.fn.recurring_select.texts["first_day_of_week"]...(7 + $.fn.recurring_select.texts["first_day_of_week"])]
         day_of_week = day_of_week % 7
-        console.log day_of_week
         str += "<a href='#' data-value='#{day_of_week}'>#{$.fn.recurring_select.texts["days_first_letter"][day_of_week]}</a>"
 
       str += "
